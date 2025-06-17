@@ -16,9 +16,7 @@
     "http": {
       "routePrefix": "",
       "cors": {
-        "allowedOrigins": ["*"],
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "POST, OPTIONS"
+        "allowedOrigins": ["*"]
       }
     }
   }
