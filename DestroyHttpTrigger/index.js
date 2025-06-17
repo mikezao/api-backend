@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function for destroy processed a request.');
 
+    // These should be set in your Azure Function App's configuration
     const GITLAB_TOKEN = process.env.DESTROY_GITLAB_TRIGGER_TOKEN;
     const GITLAB_PROJECT_ID = process.env.DESTROY_GITLAB_PROJECT_ID;
     const GITLAB_REF = process.env.DESTROY_GITLAB_REF || 'main';
@@ -15,12 +16,12 @@ module.exports = async function (context, req) {
         return;
     }
 
-    const { VM_NAME, VM_ADMIN_PASSWORD } = req.body;
+    const { VM_NAME } = req.body;
 
-    if (!VM_NAME || !VM_ADMIN_PASSWORD) {
+    if (!VM_NAME) {
         context.res = {
             status: 400,
-            body: "Missing required VM parameters: VM_NAME, VM_ADMIN_PASSWORD"
+            body: "Missing required VM parameter: VM_NAME"
         };
         return;
     }
@@ -30,7 +31,6 @@ module.exports = async function (context, req) {
     formData.append('token', GITLAB_TOKEN);
     formData.append('ref', GITLAB_REF);
     formData.append('variables[VM_NAME]', VM_NAME);
-    formData.append('variables[VM_ADMIN_PASSWORD]', VM_ADMIN_PASSWORD); // Pass the password
 
     try {
         const response = await fetch(triggerUrl, {
